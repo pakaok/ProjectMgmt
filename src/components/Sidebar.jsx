@@ -6,6 +6,7 @@ export default function SideBar({
   onSelect,
   selectedProject,
 }) {
+  console.log(projects,"sidbar")
   return (
     <>
       <aside className="w-1/3 px-8 py-16 bg-black rounded-tr-lg md:w-72">
