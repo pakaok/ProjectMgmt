@@ -8,7 +8,32 @@ function App() {
   const [projectState, setProjectState] = useState({
     selectedProject: undefined,
     projects: [],
+    tasks: [],
   });
+
+  function handleAddTask(content) {
+    const newTaskId = Math.random();
+    const newTask = {
+      projectId: projectState.selectedProject,
+      taskId: newTaskId,
+      text: content,
+    };
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, newTask],
+      };
+    });
+  }
+
+  function handleDeleteTask(taskId) {
+    setProjectState((prevState) => {
+      const newProjectTasks = prevState.tasks.filter(
+        (task) => task.taskId != taskId && task.projectId === prevState.selectedProject
+      );
+      return { ...prevState, tasks: newProjectTasks };
+    });
+  }
 
   function handleProjectState() {
     setProjectState((prevState) => {
@@ -32,6 +57,7 @@ function App() {
     };
     setProjectState((prevState) => {
       return {
+        ...prevState,
         projects: [...prevState.projects, newProject],
         selectedProject: undefined,
       };
@@ -49,7 +75,11 @@ function App() {
       const updatedProjects = prevState.projects.filter((project) => {
         return project.id != prevState.selectedProject;
       });
-      return { projects:updatedProjects, selectedProject: undefined };
+      return {
+        ...prevState,
+        projects: updatedProjects,
+        selectedProject: undefined,
+      };
     });
   }
 
@@ -64,9 +94,18 @@ function App() {
   } else {
     const selectedProject = projectState.projects.find((project) => {
       return project.id === projectState.selectedProject;
-    });
+    })
+    const selectedTasks = projectState.tasks.filter(task=>(
+      task.projectId == projectState.selectedProject
+    ))
     content = (
-      <ProjectDetail project={selectedProject} onDelete={handleDeleteProject} />
+      <ProjectDetail
+        tasks={selectedTasks}
+        project={selectedProject}
+        onDelete={handleDeleteProject}
+        onAddTask={handleAddTask}
+        onDeleteTask={handleDeleteTask}
+      />
     );
   }
 
