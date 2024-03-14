@@ -29,7 +29,7 @@ function App() {
   function handleDeleteTask(taskId) {
     setProjectState((prevState) => {
       const newProjectTasks = prevState.tasks.filter(
-        (task) => task.taskId != taskId && task.projectId === prevState.selectedProject
+        (task) => task.taskId !== taskId 
       );
       return { ...prevState, tasks: newProjectTasks };
     });
